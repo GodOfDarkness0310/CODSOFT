@@ -1,40 +1,58 @@
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 
 public class NumberGuessing {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        Random rand = new Random();
-        
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
         int min = 1;
         int max = 100;
+        int target = random.nextInt(max - min + 1) + min;
         int attempts = 5;
-        
-        System.out.println("Welcome to the Number Guessing Game!");
+        int remainingAttempts = attempts;
+        int hintsUsed = 0;
+
+        System.out.println("************************************");
+        System.out.println("*   Welcome to the Guessing Game!  *");
+        System.out.println("************************************");
         System.out.println("I've chosen a number between " + min + " and " + max + ".");
-        
-        int target = rand.nextInt(max - min + 1) + min;
-        boolean correctGuess = false;
-        
-        for (int attempt = 1; attempt <= attempts; attempt++) {
-            System.out.print("Attempt #" + attempt + ": Your guess: ");
-            int guess = sc.nextInt();
-            
+        System.out.println("You have " + attempts + " attempts.");
+        System.out.println("Let's begin!\n");
+
+        while (remainingAttempts > 0) {
+            System.out.print("Enter your guess: ");
+            int guess = scanner.nextInt();
+
             if (guess == target) {
-                correctGuess = true;
-                System.out.println("Congratulations! You guessed correctly.");
+                System.out.println("\nCongratulations! You're a mind reader! (^o^)/");
+                System.out.println("You guessed the secret number " + target + ".");
                 break;
             } else if (guess < target) {
-                System.out.println("Your guess is too low.");
+                System.out.println("\nYour guess is too low. Aim higher! ┗( T_T )┛");
             } else {
-                System.out.println("Your guess is too high.");
+                System.out.println("\nYour guess is too high. Bring it down! ㄟ( ▔__,▔ )ㄏ");
+            }
+
+            remainingAttempts--;
+            if (remainingAttempts > 0) {
+                System.out.println("You have " + remainingAttempts + " attempts left.");
+                if (hintsUsed < 2 && random.nextBoolean()) {
+                    if (random.nextBoolean()) {
+                        System.out.println("Here's a hint: The secret number ends with " + target % 10 + " (+_+)?");
+                    } else {
+                        int divisor = random.nextInt(3) + 2;
+                        System.out.println("Hint: The secret number is divisible by " + divisor + " ☆*: .｡. o(≧▽≦)o .｡.:*☆");
+                    }
+                    hintsUsed++;
+                }
+                System.out.println();
+            } else {
+                System.out.println("Oops! You're out of attempts. Don't worry, try again! (^o^)/");
+                System.out.println("The secret number was: " + target);
             }
         }
-        
-        if (!correctGuess) {
-            System.out.println("Sorry, you're out of attempts. The correct number was: " + target);
-        }
-        
-        sc.close();
+
+        scanner.close();
     }
 }
